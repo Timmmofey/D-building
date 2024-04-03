@@ -10,22 +10,24 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
         android:layout_marginTop="136dp"
         android:fontFamily="cursive"
         android:text="D-building"
         android:textSize="60dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="45dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="240dp"
         android:layout_height="23dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="36dp"
         android:fontFamily="cursive"
         android:text="Здесь начинается недвижимость..."
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:layout_editor_absoluteX="135dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/phone_auth"
