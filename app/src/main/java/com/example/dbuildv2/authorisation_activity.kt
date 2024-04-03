@@ -3,9 +3,9 @@ package com.example.dbuildv2
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class MainActivity : AppCompatActivity() {
+class authorisation_activity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.registration_acticity)
+        setContentView(R.layout.activity_authorisation)
     }
 }
