@@ -9,7 +9,7 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, "dBuilding", factory, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
         val query = "CREATE TABLE users (" +
-                "id INT PRIMARY KEY AUTOINCREMENT," +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "phone TEXT, " +
                 "last_name TEXT," +
                 "first_name TEXT," +
@@ -35,4 +35,16 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
+    fun getUser(phone: String, password: String) : Boolean {
+        val db = this.readableDatabase
+
+        val result = db.rawQuery(
+            "SELECT * FROM users WHERE phone = '$phone' AND password = '$password'",
+            null
+        )
+
+        val isCorrect: Boolean = result.moveToFirst()
+        result.close()
+        return isCorrect
+    }
 }
