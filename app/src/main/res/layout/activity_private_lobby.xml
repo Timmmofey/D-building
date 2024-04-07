@@ -7,7 +7,7 @@
     tools:context=".private_lobby_activity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/userPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
@@ -24,8 +24,8 @@
         android:text="Вася Пупкин"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toEndOf="@+id/userPhoto"
+        app:layout_constraintTop_toTopOf="@+id/userPhoto" />
 
     <TextView
         android:id="@+id/textView7"
@@ -65,7 +65,7 @@
         android:layout_marginTop="12dp"
         android:text="Адрес:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/userPhoto" />
 
     <TextView
         android:id="@+id/textView11"
@@ -250,16 +250,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:text="Изменить фото"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/imageView" />
+        app:layout_constraintBottom_toBottomOf="@+id/userPhoto"
+        app:layout_constraintStart_toEndOf="@+id/userPhoto" />
 
     <TextView
         android:id="@+id/textView25"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="4dp"
         android:text="История оплаты за прошедшие месяцы:"
-        tools:layout_editor_absoluteX="28dp"
-        tools:layout_editor_absoluteY="461dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonPayWater" />
 
     <Button
         android:id="@+id/button6"
@@ -282,11 +284,20 @@
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:layout_width="393dp"
-        android:layout_height="286dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="399dp"
+        android:layout_height="238dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:layout_marginEnd="164dp"
+        android:text="Выйти"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
