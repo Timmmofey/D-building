@@ -1,5 +1,6 @@
 package com.example.dbuildv2
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.registration_acticity)
+
+        val sharedPreferences = getSharedPreferences("session", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getInt("userId", -1)
+        if (userId > 0) {
+            val intent = Intent(this, private_lobby_activity::class.java)
+            startActivity(intent)
+        }
 
         val lastNameInput: EditText = findViewById(R.id.last_name)
         val firstNameInput: EditText = findViewById(R.id.first_name)

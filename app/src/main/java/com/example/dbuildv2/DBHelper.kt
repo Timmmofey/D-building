@@ -35,16 +35,22 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.close()
     }
 
-    fun getUser(phone: String, password: String) : Boolean {
+    fun getUser(phone: String, password: String) : Int? {
         val db = this.readableDatabase
 
         val result = db.rawQuery(
-            "SELECT * FROM users WHERE phone = '$phone' AND password = '$password'",
+            "SELECT id FROM users WHERE phone = '$phone' AND password = '$password'",
             null
         )
 
-        val isCorrect: Boolean = result.moveToFirst()
+        var userId: Int? = null
+        if (result.moveToFirst()) {
+            val columnIndex = result.getColumnIndex("id")
+            if (columnIndex >= 0) {
+                userId = result.getInt(columnIndex)
+            }
+        }
         result.close()
-        return isCorrect
+        return userId
     }
 }
