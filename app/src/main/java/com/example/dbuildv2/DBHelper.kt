@@ -13,7 +13,9 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "phone TEXT, " +
                 "last_name TEXT," +
                 "first_name TEXT," +
-                "password TEXT)"
+                "password TEXT," +
+                "balance INTEGER," +
+                "photo TEXT)"
         db!!.execSQL(query)
     }
 
@@ -28,6 +30,8 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         values.put("last_name", user.lastName)
         values.put("first_name", user.firstName)
         values.put("password", user.password)
+        values.put("balance", user.balance)
+        values.put("photo", user.photo)
 
         val db = this.writableDatabase
         db.insert("users", null, values)
@@ -70,5 +74,24 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val fullName = result.getString(0) + " " + result.getString(1)
         result.close()
         return fullName
+    }
+
+    fun getUserPhoto(id: Int) : String {
+        val db = this.readableDatabase
+
+        val result = db.rawQuery(
+            "SELECT photo FROM users WHERE id = $id",
+            null
+        )
+        result.moveToFirst()
+
+        val photoURL = result.getString(0)
+        result.close()
+
+        if (photoURL == "none") {
+            return "https://ntrepidcorp.com/wp-content/uploads/2016/06/team-1.jpg"
+        }
+
+        return photoURL
     }
 }
