@@ -53,4 +53,22 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         result.close()
         return userId
     }
+
+    fun getUserName(id: Int) : String {
+        if (id == -1) {
+            return "John Doe"
+        }
+
+        val db = this.readableDatabase
+
+        val result = db.rawQuery(
+            "SELECT last_name, first_name FROM users WHERE id = $id",
+            null
+        )
+        result.moveToFirst()
+
+        val fullName = result.getString(0) + " " + result.getString(1)
+        result.close()
+        return fullName
+    }
 }
