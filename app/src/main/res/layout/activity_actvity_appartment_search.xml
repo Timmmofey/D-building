@@ -205,10 +205,11 @@
         app:layout_constraintTop_toBottomOf="@+id/editTextText6" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="409dp"
-        android:layout_height="535dp"
+        android:layout_width="404dp"
+        android:layout_height="406dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button14" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
