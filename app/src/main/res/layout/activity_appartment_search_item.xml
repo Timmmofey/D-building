@@ -7,13 +7,13 @@
     tools:context=".activity_appartment_search_item">
 
     <TextView
-        android:id="@+id/textView56"
+        android:id="@+id/item_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:text="15670"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintBottom_toBottomOf="@+id/item_image"
         tools:layout_editor_absoluteX="212dp" />
 
     <TextView
@@ -23,34 +23,34 @@
         android:layout_marginStart="16dp"
         android:text="руб./месяц"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView56"
-        app:layout_constraintStart_toEndOf="@+id/textView56" />
+        app:layout_constraintBottom_toBottomOf="@+id/item_price"
+        app:layout_constraintStart_toEndOf="@+id/item_price" />
 
     <TextView
-        android:id="@+id/textView61"
+        android:id="@+id/item_rooms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="48dp"
         android:text="3"
-        app:layout_constraintBottom_toBottomOf="@+id/textView56"
-        app:layout_constraintStart_toStartOf="@+id/textView56" />
+        app:layout_constraintBottom_toBottomOf="@+id/item_price"
+        app:layout_constraintStart_toStartOf="@+id/item_price" />
 
     <TextView
         android:id="@+id/textView65"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="комнаты"
-        app:layout_constraintBottom_toBottomOf="@+id/textView61"
+        app:layout_constraintBottom_toBottomOf="@+id/item_rooms"
         app:layout_constraintStart_toStartOf="@+id/textView58" />
 
     <TextView
-        android:id="@+id/textView66"
+        android:id="@+id/item_square"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="3dp"
         android:text="60"
-        app:layout_constraintStart_toStartOf="@+id/textView56"
-        app:layout_constraintTop_toBottomOf="@+id/textView61" />
+        app:layout_constraintStart_toStartOf="@+id/item_price"
+        app:layout_constraintTop_toBottomOf="@+id/item_rooms" />
 
     <TextView
         android:id="@+id/textView67"
@@ -58,14 +58,14 @@
         android:layout_height="wrap_content"
         android:text="кв. м."
         app:layout_constraintStart_toStartOf="@+id/textView58"
-        app:layout_constraintTop_toTopOf="@+id/textView66" />
+        app:layout_constraintTop_toTopOf="@+id/item_square" />
 
     <TextView
-        android:id="@+id/textView68"
+        android:id="@+id/item_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Город"
-        app:layout_constraintStart_toStartOf="@+id/textView56"
+        app:layout_constraintStart_toStartOf="@+id/item_price"
         tools:layout_editor_absoluteY="16dp" />
 
     <Button
@@ -79,7 +79,7 @@
         tools:layout_editor_absoluteY="144dp" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/item_image"
         android:layout_width="189dp"
         android:layout_height="152dp"
         tools:layout_editor_absoluteX="16dp"
@@ -87,11 +87,11 @@
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <TextView
-        android:id="@+id/textView71"
+        android:id="@+id/item_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Адрес"
-        app:layout_constraintTop_toBottomOf="@+id/textView68"
+        app:layout_constraintTop_toBottomOf="@+id/item_city"
         tools:layout_editor_absoluteX="212dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
