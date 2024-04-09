@@ -48,6 +48,23 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "water_price_paid INTEGER, " +
                 "FOREIGN KEY (rental_id) REFERENCES rentals(id))"
         db.execSQL(queryPayments)
+
+        val defaultApartments = listOf(
+            Apartment(2, 80.0, "Ростов-на-Дону", "ул. Береговая, 2а", 50000.0),
+            Apartment(3, 100.0, "Ростов-на-Дону", "ул. Береговая, 6", 65000.0),
+            Apartment(1, 50.0, "Ростов-на-Дону", "ул. Варфоломеева, 222а", 30000.0)
+        )
+
+        for (apartment in defaultApartments) {
+            val values = ContentValues().apply {
+                put("rooms", apartment.rooms)
+                put("square", apartment.square)
+                put("city", apartment.city)
+                put("address", apartment.address)
+                put("price", apartment.price)
+            }
+            db.insert("apartments", null, values)
+        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
