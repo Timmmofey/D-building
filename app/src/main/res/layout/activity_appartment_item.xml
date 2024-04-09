@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView51" />
 
     <TextView
-        android:id="@+id/textView47"
+        android:id="@+id/itemmore_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView43" />
 
     <TextView
-        android:id="@+id/textView48"
+        android:id="@+id/itemmore_rooms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="23dp"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView44" />
 
     <TextView
-        android:id="@+id/textView49"
+        android:id="@+id/itemmore_square"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -81,7 +81,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView45" />
 
     <TextView
-        android:id="@+id/textView50"
+        android:id="@+id/itemmore_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -118,7 +118,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
     <TextView
-        android:id="@+id/textView52"
+        android:id="@+id/itemmore_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -132,8 +132,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="кв. м."
-        app:layout_constraintStart_toEndOf="@+id/textView49"
-        app:layout_constraintTop_toTopOf="@+id/textView49" />
+        app:layout_constraintStart_toEndOf="@+id/itemmore_square"
+        app:layout_constraintTop_toTopOf="@+id/itemmore_square" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,11 +2,12 @@ package com.example.dbuildv2
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "dBuilding", factory, 2) {
+    SQLiteOpenHelper(context, "dBuilding", factory, 3) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryUsers = "CREATE TABLE users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -23,7 +24,8 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "square REAL, " +
                 "city TEXT, " +
                 "address TEXT, " +
-                "price REAL)"
+                "price INT, " +
+                "photo TEXT)"
         db.execSQL(queryApartments)
         val queryRentals = "CREATE TABLE rentals (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -50,9 +52,9 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(queryPayments)
 
         val defaultApartments = listOf(
-            Apartment(2, 80.0, "Ростов-на-Дону", "ул. Береговая, 2а", 50000.0),
-            Apartment(3, 100.0, "Ростов-на-Дону", "ул. Береговая, 6", 65000.0),
-            Apartment(1, 50.0, "Ростов-на-Дону", "ул. Варфоломеева, 222а", 30000.0)
+            Apartment(1,2, 80.0, "Ростов-на-Дону", "ул. Береговая, 2а", 50000, "https://my-dom.design/wp-content/uploads/2023/07/6.jpg"),
+            Apartment(2,3, 100.0, "Ростов-на-Дону", "ул. Береговая, 6", 65000, "https://darstroy-yug.ru/upload/medialibrary/bc3/zaxpqr3erfsy4rzu4gkr5mmoi3lvj4f5.jpg"),
+            Apartment(3,1, 50.0, "Ростов-на-Дону", "ул. Варфоломеева, 222а", 30000, "https://api.interior.ru/media/images/setka/2021_03_29/Studio_25_50.jpg")
         )
 
         for (apartment in defaultApartments) {
@@ -62,6 +64,7 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 put("city", apartment.city)
                 put("address", apartment.address)
                 put("price", apartment.price)
+                put("photo", apartment.photo)
             }
             db.insert("apartments", null, values)
         }
@@ -224,20 +227,24 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val cursor = db.rawQuery(query, null)
 
         if (cursor != null && cursor.moveToFirst()) {
+            val idIndex = cursor.getColumnIndex("id")
             val roomsIndex = cursor.getColumnIndex("rooms")
             val squareIndex = cursor.getColumnIndex("square")
             val cityIndex = cursor.getColumnIndex("city")
             val addressIndex = cursor.getColumnIndex("address")
             val priceIndex = cursor.getColumnIndex("price")
+            val photoIndex = cursor.getColumnIndex("photo")
 
             do {
+                val id = if (idIndex != -1) cursor.getInt(idIndex) else 0
                 val rooms = if (roomsIndex != -1) cursor.getInt(roomsIndex) else 0
                 val square = if (squareIndex != -1) cursor.getDouble(squareIndex) else 0.0
                 val city = if (cityIndex != -1) cursor.getString(cityIndex) else ""
                 val address = if (addressIndex != -1) cursor.getString(addressIndex) else ""
-                val price = if (priceIndex != -1) cursor.getDouble(priceIndex) else 0.0
+                val price = if (priceIndex != -1) cursor.getInt(priceIndex) else 0
+                val photo = if (photoIndex != -1) cursor.getString(photoIndex) else ""
 
-                val apartment = Apartment(rooms, square, city, address, price)
+                val apartment = Apartment(id, rooms, square, city, address, price, photo)
                 apartments.add(apartment)
             } while (cursor.moveToNext())
 
@@ -250,4 +257,13 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return apartments
     }
 
+    fun getApartmentById(id: Int): Apartment {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM apartments WHERE id = $id", null)
+        val apartment = Apartment(cursor.getInt(0), cursor.getInt(1), cursor.getDouble(2),
+            cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6))
+        db.close()
+        cursor.close()
+        return apartment
+    }
 }
