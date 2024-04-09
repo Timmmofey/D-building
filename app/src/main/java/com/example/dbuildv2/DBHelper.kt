@@ -8,19 +8,53 @@ import android.database.sqlite.SQLiteOpenHelper
 class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, "dBuilding", factory, 1) {
     override fun onCreate(db: SQLiteDatabase?) {
-        val query = "CREATE TABLE users (" +
+        val queryUsers = "CREATE TABLE users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "phone TEXT, " +
                 "last_name TEXT," +
                 "first_name TEXT," +
                 "password TEXT," +
-                "balance INTEGER," +
+                "balance REAL," +
                 "photo TEXT)"
-        db!!.execSQL(query)
+        db!!.execSQL(queryUsers)
+        val queryApartments = "CREATE TABLE apartments (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "rooms INTEGER, " +
+                "square REAL, " +
+                "city TEXT, " +
+                "address TEXT, " +
+                "price REAL)"
+        db.execSQL(queryApartments)
+        val queryRentals = "CREATE TABLE rentals (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "user_id INTEGER, " +
+                "apartment_id INTEGER, " +
+                "is_archived INTEGER, " +
+                "FOREIGN KEY (user_id) REFERENCES users(id), " +
+                "FOREIGN KEY (apartment_id) REFERENCES apartments(id))"
+        db.execSQL(queryRentals)
+        val queryPayments = "CREATE TABLE payments (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "rental_id INTEGER, " +
+                "year INTEGER, " +
+                "month TEXT, " +
+                "rental_price REAL," +
+                "rental_price_paid INTEGER, " +
+                "gas_price REAL, " +
+                "gas_price_paid INTEGER, " +
+                "electricity_price REAL, " +
+                "electricity_price_paid INTEGER, " +
+                "water_price REAL, " +
+                "water_price_paid INTEGER, " +
+                "FOREIGN KEY (rental_id) REFERENCES rentals(id))"
+        db.execSQL(queryPayments)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL("DROP TABLE IF EXISTS users")
+        db.execSQL("DROP TABLE IF EXISTS apartments")
+        db.execSQL("DROP TABLE IF EXISTS rentals")
+        db.execSQL("DROP TABLE IF EXISTS payments")
         onCreate(db)
     }
 
