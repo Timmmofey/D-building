@@ -22,6 +22,10 @@ class appartment_item_activity : AppCompatActivity() {
         val apartId = intent.getIntExtra("itemId", 1)
 
         val apartment = db.getApartmentById(apartId)
+        price.text = apartment.price.toString()
+        rooms.text = apartment.rooms.toString()
+        square.text = apartment.square.toString()
         city.text = apartment.city
+        address.text = apartment.address
     }
 }

@@ -2,7 +2,6 @@ package com.example.dbuildv2
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
@@ -260,6 +259,7 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getApartmentById(id: Int): Apartment {
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT * FROM apartments WHERE id = $id", null)
+        cursor.moveToFirst()
         val apartment = Apartment(cursor.getInt(0), cursor.getInt(1), cursor.getDouble(2),
             cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6))
         db.close()
