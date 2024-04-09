@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             } else if (phoneNumber.length != 12 || phoneNumber[0] != '+' || phoneNumber[1] != '7') {
                 Toast.makeText(this,"Введите корректный номер телефона через +7.", Toast.LENGTH_SHORT).show()
             } else {
-                val user = User(phoneNumber, lastName, firstName, password, 2000000, "none")
+                val user = User(phoneNumber, lastName, firstName, password, 2000000.0, "none")
 
                 val db = DBHelper(this, null)
                 db.addUser(user)

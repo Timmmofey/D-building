@@ -27,6 +27,7 @@ class authorisation_activity : AppCompatActivity() {
                     "Введите логин и пароль",
                     Toast.LENGTH_SHORT
                 ).show()
+                return@setOnClickListener
             }
             val db = DBHelper(this, null)
             val userId = db.getUser(login, password)
