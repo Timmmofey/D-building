@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "dBuilding", factory, 1) {
+    SQLiteOpenHelper(context, "dBuilding", factory, 2) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryUsers = "CREATE TABLE users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -68,10 +68,8 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        db!!.execSQL("DROP TABLE IF EXISTS users")
-        db.execSQL("DROP TABLE IF EXISTS apartments")
-        db.execSQL("DROP TABLE IF EXISTS rentals")
-        db.execSQL("DROP TABLE IF EXISTS payments")
+        context.deleteDatabase("dBuilding")
+
         onCreate(db)
     }
 
@@ -93,8 +91,16 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
     fun getUser(phone: String, password: String) : Int? {
         val db = this.readableDatabase
 
-        val result = db.rawQuery(
-            "SELECT id FROM users WHERE phone = '$phone' AND password = '$password'",
+        val selection = "phone = ? AND password = ?"
+        val selectionArgs = arrayOf(phone, password)
+
+        val result = db.query(
+            "users",
+            arrayOf("id"),
+            selection,
+            selectionArgs,
+            null,
+            null,
             null
         )
 
@@ -109,15 +115,16 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return userId
     }
 
-    fun getUserName(id: Int) : String {
-        if (id == -1) {
+
+    fun getUserName(userId: Int) : String {
+        if (userId == -1) {
             return "John Doe"
         }
 
         val db = this.readableDatabase
 
         val result = db.rawQuery(
-            "SELECT last_name, first_name FROM users WHERE id = $id",
+            "SELECT last_name, first_name FROM users WHERE id = $userId",
             null
         )
         result.moveToFirst()
@@ -127,11 +134,11 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return fullName
     }
 
-    fun getUserPhoto(id: Int) : String {
+    fun getUserPhoto(userId: Int) : String {
         val db = this.readableDatabase
 
         val result = db.rawQuery(
-            "SELECT photo FROM users WHERE id = $id",
+            "SELECT photo FROM users WHERE id = $userId",
             null
         )
         result.moveToFirst()
@@ -144,5 +151,58 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
 
         return photoURL
+    }
+
+    fun getAddress(userId: Int): String {
+        val db = this.readableDatabase
+
+        // Запрос для получения адреса пользователя, если у него есть арендованная квартира
+        val query = "SELECT address FROM apartments " +
+                "INNER JOIN rentals ON apartments.id = rentals.apartment_id " +
+                "WHERE rentals.user_id = $userId"
+
+        val result = db.rawQuery(query, null)
+        val address: String
+
+        // Проверяем, есть ли у пользователя арендованная квартира
+        if (result.moveToFirst()) {
+            val columnIndex = result.getColumnIndex("address")
+            if (columnIndex != -1) {
+                address = result.getString(columnIndex)
+            } else {
+                address = "Столбец с адресом не найден."
+            }
+        } else {
+            // Если у пользователя нет квартиры, возвращаем сообщение об этом
+            address = "У вас нет арендованной квартиры."
+        }
+
+        result.close()
+        db.close()
+
+        return address
+    }
+
+    fun getBalance(userId: Int) : String {
+        val db = this.readableDatabase
+
+        val result = db.rawQuery(
+            "SELECT balance FROM users WHERE id = $userId",
+            null
+        )
+        result.moveToFirst()
+
+        val balance = result.getDouble(0)
+        result.close()
+        val integerPart = balance.toInt()
+
+        // Если исходное число равно его целой части, то это целое число
+        return if (balance == integerPart.toDouble()) {
+            // Вернуть целое число без дробной части
+            integerPart.toString()
+        } else {
+            // Если число нецелое, вернуть его без изменений
+            balance.toString()
+        }
     }
 }
