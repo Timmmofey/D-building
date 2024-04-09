@@ -53,7 +53,7 @@ class private_lobby_activity : AppCompatActivity() {
         userAddress.text = db.getAddress(userId)
         userBalance.text = db.getBalance(userId)
 
-        Picasso.get().load(imageUrl).resize(375, 375).into(photo)
+        Picasso.get().load(imageUrl).resize(375, 250).into(photo)
 
         if (userAddress.text == "У вас нет арендованной квартиры." || userAddress.text == "Столбец с адресом не найден.") {
             for (item in hideButtons) {

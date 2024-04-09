@@ -111,7 +111,10 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 userId = result.getInt(columnIndex)
             }
         }
+
         result.close()
+        db.close()
+
         return userId
     }
 
@@ -130,7 +133,9 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         result.moveToFirst()
 
         val fullName = result.getString(0) + " " + result.getString(1)
+
         result.close()
+        db.close()
         return fullName
     }
 
@@ -144,7 +149,9 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         result.moveToFirst()
 
         val photoURL = result.getString(0)
+
         result.close()
+        db.close()
 
         if (photoURL == "none") {
             return "https://ntrepidcorp.com/wp-content/uploads/2016/06/team-1.jpg"
@@ -193,7 +200,10 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         result.moveToFirst()
 
         val balance = result.getDouble(0)
+
         result.close()
+        db.close()
+
         val integerPart = balance.toInt()
 
         // Если исходное число равно его целой части, то это целое число
@@ -205,4 +215,39 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
             balance.toString()
         }
     }
+
+    fun getApartmentsFromDatabase(): ArrayList<Apartment> {
+        val apartments = ArrayList<Apartment>()
+        val db = this.readableDatabase
+
+        val query = "SELECT * FROM apartments"
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor != null && cursor.moveToFirst()) {
+            val roomsIndex = cursor.getColumnIndex("rooms")
+            val squareIndex = cursor.getColumnIndex("square")
+            val cityIndex = cursor.getColumnIndex("city")
+            val addressIndex = cursor.getColumnIndex("address")
+            val priceIndex = cursor.getColumnIndex("price")
+
+            do {
+                val rooms = if (roomsIndex != -1) cursor.getInt(roomsIndex) else 0
+                val square = if (squareIndex != -1) cursor.getDouble(squareIndex) else 0.0
+                val city = if (cityIndex != -1) cursor.getString(cityIndex) else ""
+                val address = if (addressIndex != -1) cursor.getString(addressIndex) else ""
+                val price = if (priceIndex != -1) cursor.getDouble(priceIndex) else 0.0
+
+                val apartment = Apartment(rooms, square, city, address, price)
+                apartments.add(apartment)
+            } while (cursor.moveToNext())
+
+            cursor.close()
+        }
+
+
+        db.close()
+
+        return apartments
+    }
+
 }
