@@ -14,7 +14,7 @@
         android:text="15670"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/item_image"
-        tools:layout_editor_absoluteX="212dp" />
+        app:layout_constraintStart_toStartOf="@+id/item_address" />
 
     <TextView
         android:id="@+id/textView58"
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:text="Город"
         app:layout_constraintStart_toStartOf="@+id/item_price"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintTop_toTopOf="@+id/item_image" />
 
     <Button
         android:id="@+id/button15"
@@ -76,22 +76,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.814"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="144dp" />
+        app:layout_constraintTop_toBottomOf="@+id/item_price" />
 
     <ImageView
         android:id="@+id/item_image"
         android:layout_width="189dp"
         android:layout_height="152dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <TextView
         android:id="@+id/item_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
         android:layout_marginTop="12dp"
         android:text="Адрес"
-        app:layout_constraintTop_toBottomOf="@+id/item_city"
-        tools:layout_editor_absoluteX="212dp" />
+        app:layout_constraintStart_toEndOf="@+id/item_image"
+        app:layout_constraintTop_toBottomOf="@+id/item_city" />
 </androidx.constraintlayout.widget.ConstraintLayout>
