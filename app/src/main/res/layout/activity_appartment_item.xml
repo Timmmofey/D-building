@@ -25,6 +25,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
         android:text="Арнедная плата        :"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemmore_photos" />
 
@@ -32,8 +33,9 @@
         android:id="@+id/textView44"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:text="Количество комнат :"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textView43"
         app:layout_constraintTop_toBottomOf="@+id/textView43" />
 
@@ -41,8 +43,9 @@
         android:id="@+id/textView45"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:text="Площадь                    :"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textView44"
         app:layout_constraintTop_toBottomOf="@+id/textView44" />
 
@@ -50,8 +53,9 @@
         android:id="@+id/textView46"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:text="Ардес                          :"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textView51"
         app:layout_constraintTop_toBottomOf="@+id/textView51" />
 
@@ -61,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="15670"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/textView43"
         app:layout_constraintTop_toTopOf="@+id/textView43" />
 
@@ -70,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="23dp"
         android:text="3"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/textView44"
         app:layout_constraintTop_toTopOf="@+id/textView44" />
 
@@ -79,6 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="60"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/textView45"
         app:layout_constraintTop_toTopOf="@+id/textView45" />
 
@@ -87,7 +94,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="еРеНДе, левенцоука 123"
+        android:text="левенцоука 123"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/textView46"
         app:layout_constraintTop_toTopOf="@+id/textView46" />
 
@@ -96,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:text="Арендовать"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView46" />
@@ -105,8 +113,8 @@
         android:id="@+id/button13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="60dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="232dp"
         android:backgroundTint="#BC1717"
         android:text="Отказаться"
         app:layout_constraintEnd_toEndOf="parent"
@@ -116,8 +124,9 @@
         android:id="@+id/textView51"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="48dp"
         android:text="Город                          :"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/textView45"
         app:layout_constraintTop_toBottomOf="@+id/textView45" />
 
@@ -127,6 +136,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="еРеНде"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/textView51"
         app:layout_constraintTop_toTopOf="@+id/textView51" />
 
@@ -136,8 +146,28 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="кв. м."
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/itemmore_square"
         app:layout_constraintTop_toTopOf="@+id/itemmore_square" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="20dp"
+        android:text="Назад к каталогу"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemmore_address" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:text="Вернуться в ЛК"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button13" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
