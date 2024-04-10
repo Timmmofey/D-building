@@ -45,7 +45,8 @@ class private_lobby_activity : AppCompatActivity() {
             findViewById<Button>(R.id.buttonPayRent),
             findViewById<Button>(R.id.buttonPayGas),
             findViewById<Button>(R.id.buttonPayElectricity),
-            findViewById<Button>(R.id.buttonPayWater)
+            findViewById<Button>(R.id.buttonPayWater),
+            findViewById<Button>(R.id.button6)
         )
 
         fullName.text = db.getUserName(userId)

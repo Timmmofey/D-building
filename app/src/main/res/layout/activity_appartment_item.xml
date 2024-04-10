@@ -7,11 +7,13 @@
     tools:context=".appartment_item_activity">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager2"
+        android:id="@+id/itemmore_photos"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
 
 
     </androidx.viewpager2.widget.ViewPager2>
@@ -24,7 +26,7 @@
         android:layout_marginTop="28dp"
         android:text="Арнедная плата        :"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager2" />
+        app:layout_constraintTop_toBottomOf="@+id/itemmore_photos" />
 
     <TextView
         android:id="@+id/textView44"
@@ -103,10 +105,12 @@
         android:id="@+id/button13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="60dp"
         android:backgroundTint="#BC1717"
         android:text="Отказаться"
-        tools:layout_editor_absoluteX="193dp"
-        tools:layout_editor_absoluteY="503dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemmore_address" />
 
     <TextView
         android:id="@+id/textView51"
