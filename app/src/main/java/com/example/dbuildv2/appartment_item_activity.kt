@@ -34,9 +34,11 @@ class appartment_item_activity : AppCompatActivity() {
         address.text = apartment.address
 
         val imageUrls = arrayOf(
-            "https://opis-cdn.tinkoffjournal.ru/mercury/prodala-kvartiry-in.jpg",
-            "https://mainadmin.novostroyki.shop/media/imagemanager/43242_ee445a56ae509627ddd968ecef5c63f1.jpg",
-            "https://remont-f.ru/upload/iblock/4f8/dizayn-interyera-2-komnatnoj-kvartiry-47-kv-m-foto-6-3814.jpg"
+            apartment.photo1,
+            apartment.photo2,
+            apartment.photo3,
+            apartment.photo4,
+            apartment.photo5
         )
 
         val adapter = ImagePagerAdapter(imageUrls)

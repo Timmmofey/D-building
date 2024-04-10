@@ -32,7 +32,7 @@ class ItemsAdapter(var items: List<Apartment>, var context: Context) : RecyclerV
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        Picasso.get().load(items[position].photo).resize(450, 375).into(holder.image)
+        Picasso.get().load(items[position].photo1).resize(450, 375).into(holder.image)
         holder.city.text = items[position].city
         holder.address.text = items[position].address
         holder.rooms.text = items[position].rooms.toString()

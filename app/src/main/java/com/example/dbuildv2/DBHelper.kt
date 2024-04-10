@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "dBuilding", factory, 3) {
+    SQLiteOpenHelper(context, "dBuilding", factory, 4) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryUsers = "CREATE TABLE users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -24,7 +24,11 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 "city TEXT, " +
                 "address TEXT, " +
                 "price INT, " +
-                "photo TEXT)"
+                "photo1 TEXT, " +
+                "photo2 TEXT, " +
+                "photo3 TEXT, " +
+                "photo4 TEXT," +
+                "photo5 TEXT)"
         db.execSQL(queryApartments)
         val queryRentals = "CREATE TABLE rentals (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -51,9 +55,24 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(queryPayments)
 
         val defaultApartments = listOf(
-            Apartment(1,2, 80.0, "Ростов-на-Дону", "ул. Береговая, 2а", 50000, "https://my-dom.design/wp-content/uploads/2023/07/6.jpg"),
-            Apartment(2,3, 100.0, "Ростов-на-Дону", "ул. Береговая, 6", 65000, "https://darstroy-yug.ru/upload/medialibrary/bc3/zaxpqr3erfsy4rzu4gkr5mmoi3lvj4f5.jpg"),
-            Apartment(3,1, 50.0, "Ростов-на-Дону", "ул. Варфоломеева, 222а", 30000, "https://api.interior.ru/media/images/setka/2021_03_29/Studio_25_50.jpg")
+            Apartment(1,2, 60.0, "Ростов-на-Дону", "ул. Береговая, 2а", 65000,
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-budennovskiy-prospekt-2122804571-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-budennovskiy-prospekt-2122700861-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-budennovskiy-prospekt-2122710977-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-budennovskiy-prospekt-2122804559-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-budennovskiy-prospekt-2122700862-1.jpg"),
+            Apartment(2,1, 41.1, "Ростов-на-Дону", "ул. Береговая, 6", 50000,
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-beregovaya-ulica-2129458415-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-beregovaya-ulica-2129458409-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-beregovaya-ulica-2129456347-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-beregovaya-ulica-2129456383-1.jpg",
+                "https://images.cdn-cian.ru/images/kvartira-rostovnadonu-beregovaya-ulica-2129456328-1.jpg"),
+            Apartment(3,1, 42.0, "Ростов-на-Дону", "ул. Варфоломеева, 222а", 30000,
+                "https://40.img.avito.st/image/1/1.4G-yrLa6TIaEG86L_ruHKn8PSowGj1oECw9OgBIJTg.k4_uajcnO2digQhnYEcN4GRikF9PIx4Fgfj82t9N01Q",
+                "https://40.img.avito.st/image/1/1.55eWg7a6S36gNMlz1JSA0lsgTXQioF38LyBJeDYmSQ.pe0dZvq_Y5OSWXdNun7gTeADgGP8O6Clr6SwqpvIAtc",
+                "https://50.img.avito.st/image/1/1.lKv2W7a6OELA7LpP0k3z7jv4PkhCeC7AT_g6RFb-Og.aK4y0hD-w47nF7H3NFrT2GwcPGhj0EqzjuuQRTMjfsY",
+                "https://20.img.avito.st/image/1/1.62x3hLa6R4VBM8WILaPFKLonQY_Dp1EHzidFg9chRQ.V4WPHY6NwSqoX1eRdmS5B4clxHi9Rip54ZiA1bYioKI",
+                "https://40.img.avito.st/image/1/1.4eO-vLa6TQqIC88H8KuGpnMfSwAKn1uIBx9PDB4ZTw.ZM-RbLY-8kRA_st0my3286MGbgZfIIsUjTy26RIto1g")
         )
 
         for (apartment in defaultApartments) {
@@ -63,7 +82,11 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 put("city", apartment.city)
                 put("address", apartment.address)
                 put("price", apartment.price)
-                put("photo", apartment.photo)
+                put("photo1", apartment.photo1)
+                put("photo2", apartment.photo2)
+                put("photo3", apartment.photo3)
+                put("photo4", apartment.photo4)
+                put("photo5", apartment.photo5)
             }
             db.insert("apartments", null, values)
         }
@@ -232,7 +255,11 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
             val cityIndex = cursor.getColumnIndex("city")
             val addressIndex = cursor.getColumnIndex("address")
             val priceIndex = cursor.getColumnIndex("price")
-            val photoIndex = cursor.getColumnIndex("photo")
+            val photo1Index = cursor.getColumnIndex("photo1")
+            val photo2Index = cursor.getColumnIndex("photo2")
+            val photo3Index = cursor.getColumnIndex("photo3")
+            val photo4Index = cursor.getColumnIndex("photo4")
+            val photo5Index = cursor.getColumnIndex("photo5")
 
             do {
                 val id = if (idIndex != -1) cursor.getInt(idIndex) else 0
@@ -241,9 +268,14 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 val city = if (cityIndex != -1) cursor.getString(cityIndex) else ""
                 val address = if (addressIndex != -1) cursor.getString(addressIndex) else ""
                 val price = if (priceIndex != -1) cursor.getInt(priceIndex) else 0
-                val photo = if (photoIndex != -1) cursor.getString(photoIndex) else ""
+                val photo1 = if (photo1Index != -1) cursor.getString(photo1Index) else ""
+                val photo2 = if (photo2Index != -1) cursor.getString(photo2Index) else ""
+                val photo3 = if (photo3Index != -1) cursor.getString(photo3Index) else ""
+                val photo4 = if (photo4Index != -1) cursor.getString(photo4Index) else ""
+                val photo5 = if (photo5Index != -1) cursor.getString(photo5Index) else ""
 
-                val apartment = Apartment(id, rooms, square, city, address, price, photo)
+                val apartment = Apartment(id, rooms, square, city, address, price, photo1,
+                    photo2, photo3, photo4, photo5)
                 apartments.add(apartment)
             } while (cursor.moveToNext())
 
@@ -260,8 +292,14 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val db = readableDatabase
         val cursor = db.rawQuery("SELECT * FROM apartments WHERE id = $id", null)
         cursor.moveToFirst()
-        val apartment = Apartment(cursor.getInt(0), cursor.getInt(1), cursor.getDouble(2),
-            cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getString(6))
+        val apartment = Apartment(
+            cursor.getInt(0), cursor.getInt(1),
+            cursor.getDouble(2), cursor.getString(3),
+            cursor.getString(4), cursor.getInt(5),
+            cursor.getString(6), cursor.getString(7),
+            cursor.getString(8), cursor.getString(9),
+            cursor.getString(10)
+        )
         db.close()
         cursor.close()
         return apartment
