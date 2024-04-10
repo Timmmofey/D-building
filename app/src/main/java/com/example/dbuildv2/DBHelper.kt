@@ -191,7 +191,7 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         // Запрос для получения адреса пользователя, если у него есть арендованная квартира
         val query = "SELECT address FROM apartments " +
                 "INNER JOIN rentals ON apartments.id = rentals.apartment_id " +
-                "WHERE rentals.user_id = $userId"
+                "WHERE rentals.user_id = $userId AND rentals.is_archived = 0"
 
         val result = db.rawQuery(query, null)
         val address: String
@@ -205,7 +205,7 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 address = "Столбец с адресом не найден."
             }
         } else {
-            // Если у пользователя нет квартиры, возвращаем сообщение об этом
+            // Если у пользователя нет квартиры
             address = "У вас нет арендованной квартиры."
         }
 
@@ -304,4 +304,34 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         cursor.close()
         return apartment
     }
+
+    fun rentApartment(userId: Int, apartmentId: Int, isApartmentRented: Boolean, newBalance: Int) {
+        val db = writableDatabase
+
+        // Если у пользователя уже есть арендованная квартира, оборвать аренду
+        if (isApartmentRented) {
+            val updateValues = ContentValues()
+            updateValues.put("is_archived", 1)
+
+            val whereClause = "user_id = ? AND is_archived = 0"
+            val whereArgs = arrayOf(userId.toString())
+
+            db.update("rentals", updateValues, whereClause, whereArgs)
+        }
+
+        // Создаем новую запись об аренде для выбранной квартиры
+        val newRentalValues = ContentValues().apply {
+            put("user_id", userId)
+            put("apartment_id", apartmentId)
+            put("is_archived", 0)
+        }
+
+        val updateBalanceQuery = "UPDATE users SET balance = $newBalance"
+        db.execSQL(updateBalanceQuery)
+
+        db.insert("rentals", null, newRentalValues)
+
+        db.close()
+    }
+
 }
