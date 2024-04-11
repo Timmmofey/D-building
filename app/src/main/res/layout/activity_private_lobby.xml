@@ -250,8 +250,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Изменить фото"
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintStart_toStartOf="@+id/user_spendmoney"
+        app:layout_constraintTop_toBottomOf="@+id/user_spendmoney" />
 
     <TextView
         android:id="@+id/textView25"
@@ -303,7 +303,7 @@
         app:layout_constraintTop_toTopOf="@+id/user_changeapart" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/user_spendmoney"
         android:layout_width="111dp"
         android:layout_height="33dp"
         android:layout_marginTop="7dp"

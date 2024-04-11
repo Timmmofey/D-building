@@ -7,7 +7,7 @@
     tools:context=".activity_add_funds">
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/balance_card"
         android:layout_width="281dp"
         android:layout_height="44dp"
         android:layout_marginTop="52dp"
@@ -32,48 +32,49 @@
         app:layout_constraintTop_toBottomOf="@+id/textView56" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/balance_exp"
         android:layout_width="137dp"
         android:layout_height="51dp"
         android:ems="10"
         android:hint="Cрок действия"
         android:inputType="text"
-        app:layout_constraintStart_toStartOf="@+id/editTextText"
-        app:layout_constraintTop_toTopOf="@+id/editTextText3" />
+        app:layout_constraintStart_toStartOf="@+id/balance_card"
+        app:layout_constraintTop_toTopOf="@+id/balance_cvc" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/balance_cvc"
         android:layout_width="95dp"
         android:layout_height="51dp"
         android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="CVC"
         android:inputType="text"
-        app:layout_constraintEnd_toEndOf="@+id/editTextText"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintEnd_toEndOf="@+id/balance_card"
+        app:layout_constraintTop_toBottomOf="@+id/balance_card" />
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/balance_summ"
         android:layout_width="281dp"
         android:layout_height="42dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="92dp"
         android:ems="10"
         android:hint="Введите сумму пополнения"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/balance_cvc" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/balance_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="108dp"
         android:text="Пополнить"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+        app:layout_constraintTop_toBottomOf="@+id/balance_summ" />
 
     <TextView
         android:id="@+id/textView56"
@@ -87,14 +88,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/editTextText5"
-        android:layout_width="281dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:ems="10"
-        android:hint="Введите имя"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="@+id/editTextText2"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,6 +27,7 @@ class private_lobby_activity : AppCompatActivity() {
         val userBalance: TextView = findViewById(R.id.user_balance)
         val userChangeApartment: Button = findViewById(R.id.user_changeapart)
         val userMore: Button = findViewById(R.id.user_more)
+        val spendMoneyButton: Button = findViewById(R.id.user_spendmoney)
 
         val hideButtons = listOf(
             findViewById<TextView>(R.id.textView12),
@@ -74,6 +75,11 @@ class private_lobby_activity : AppCompatActivity() {
             intent.putExtra("itemId", db.getApartmentId(userId))
             intent.putExtra("dirFrom", "lk")
 
+            startActivity(intent)
+        }
+
+        spendMoneyButton.setOnClickListener {
+            val intent = Intent(this, activity_add_funds::class.java)
             startActivity(intent)
         }
 

@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import java.time.temporal.TemporalAmount
 
 class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
     SQLiteOpenHelper(context, "dBuilding", factory, 4) {
@@ -268,6 +269,19 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
             // Если число нецелое, вернуть его без изменений
             balance.toString()
         }
+    }
+
+    fun addBalance(userId: Int, amount: Int) {
+        if (userId == -1) {
+            return
+        }
+
+        val db = this.writableDatabase
+
+        val query = "UPDATE users SET balance = (balance + ?) WHERE id = ?"
+
+        db.execSQL(query, arrayOf(amount, userId))
+        db.close()
     }
 
     fun getApartmentsFromDatabase(): ArrayList<Apartment> {
