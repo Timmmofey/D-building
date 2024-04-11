@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -33,8 +34,17 @@ class appartment_item_activity : AppCompatActivity() {
         val city: TextView = findViewById(R.id.itemmore_city)
         val address: TextView = findViewById(R.id.itemmore_address)
         val chooseButton: Button = findViewById(R.id.itemmore_choosebtn)
+        val backButton: Button = findViewById(R.id.itemmore_back)
+        val rejectButton: Button = findViewById(R.id.itemmore_reject)
+        val backtToLkButton: Button = findViewById(R.id.itemmore_backLK)
 
         val apartId = intent.getIntExtra("itemId", 1)
+        val directedFrom = intent.getStringExtra("dirFrom")
+
+        if (directedFrom == "search") {
+            rejectButton.visibility = View.INVISIBLE
+            backtToLkButton.visibility = View.INVISIBLE
+        }
 
         val apartment = db.getApartmentById(apartId)
         price.text = apartment.price.toString()
@@ -82,6 +92,11 @@ class appartment_item_activity : AppCompatActivity() {
             }
             val dialog = builder.create()
             dialog.show()
+        }
+
+        backButton.setOnClickListener {
+            val intent = Intent(this, actvity_appartment_search::class.java)
+            startActivity(intent)
         }
 
         db.close()

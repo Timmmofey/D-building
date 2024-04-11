@@ -110,7 +110,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView46" />
 
     <Button
-        android:id="@+id/button13"
+        android:id="@+id/itemmore_reject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -151,7 +151,7 @@
         app:layout_constraintTop_toTopOf="@+id/itemmore_square" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/itemmore_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -161,13 +161,13 @@
         app:layout_constraintTop_toBottomOf="@+id/itemmore_address" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/itemmore_backLK"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="28dp"
         android:text="Вернуться в ЛК"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/button13" />
+        app:layout_constraintTop_toTopOf="@+id/itemmore_reject" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

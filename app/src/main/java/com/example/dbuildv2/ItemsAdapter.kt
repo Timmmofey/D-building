@@ -43,6 +43,7 @@ class ItemsAdapter(var items: List<Apartment>, var context: Context) : RecyclerV
             val intent = Intent(context, appartment_item_activity::class.java)
 
             intent.putExtra("itemId", items[position].id)
+            intent.putExtra("dirFrom", "search")
 
             context.startActivity(intent)
         }
