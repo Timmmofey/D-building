@@ -44,6 +44,9 @@ class appartment_item_activity : AppCompatActivity() {
         if (directedFrom == "search") {
             rejectButton.visibility = View.INVISIBLE
             backtToLkButton.visibility = View.INVISIBLE
+        } else if (directedFrom == "lk") {
+            chooseButton.visibility = View.INVISIBLE
+            backButton.visibility = View.INVISIBLE
         }
 
         val apartment = db.getApartmentById(apartId)
@@ -97,6 +100,30 @@ class appartment_item_activity : AppCompatActivity() {
         backButton.setOnClickListener {
             val intent = Intent(this, actvity_appartment_search::class.java)
             startActivity(intent)
+        }
+
+        backtToLkButton.setOnClickListener {
+            val intent = Intent(this, private_lobby_activity::class.java)
+            startActivity(intent)
+        }
+
+        rejectButton.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Подтверждение завершения аренды")
+            builder.setMessage("Вы уверены, что хотите отказаться от квартиры?")
+            builder.setPositiveButton("Да") { dialogInterface: DialogInterface, i: Int ->
+                db.unrentApartment(userId, apartId)
+
+                Toast.makeText(this,"Аренда завершена.", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this, private_lobby_activity::class.java)
+                startActivity(intent)
+            }
+            builder.setNegativeButton("Нет") { dialogInterface: DialogInterface, i: Int ->
+
+            }
+            val dialog = builder.create()
+            dialog.show()
         }
 
         db.close()

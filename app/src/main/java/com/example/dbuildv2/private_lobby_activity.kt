@@ -26,6 +26,7 @@ class private_lobby_activity : AppCompatActivity() {
         val userAddress: TextView = findViewById(R.id.user_adress)
         val userBalance: TextView = findViewById(R.id.user_balance)
         val userChangeApartment: Button = findViewById(R.id.user_changeapart)
+        val userMore: Button = findViewById(R.id.user_more)
 
         val hideButtons = listOf(
             findViewById<TextView>(R.id.textView12),
@@ -46,7 +47,7 @@ class private_lobby_activity : AppCompatActivity() {
             findViewById<Button>(R.id.buttonPayGas),
             findViewById<Button>(R.id.buttonPayElectricity),
             findViewById<Button>(R.id.buttonPayWater),
-            findViewById<Button>(R.id.button6)
+            findViewById<Button>(R.id.user_more)
         )
 
         fullName.text = db.getUserName(userId)
@@ -64,6 +65,15 @@ class private_lobby_activity : AppCompatActivity() {
 
         userChangeApartment.setOnClickListener {
             val intent = Intent(this, actvity_appartment_search::class.java)
+            startActivity(intent)
+        }
+
+        userMore.setOnClickListener {
+            val intent = Intent(this, appartment_item_activity::class.java)
+
+            intent.putExtra("itemId", db.getApartmentId(userId))
+            intent.putExtra("dirFrom", "lk")
+
             startActivity(intent)
         }
 

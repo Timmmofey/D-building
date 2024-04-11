@@ -215,6 +215,35 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return address
     }
 
+    fun getApartmentId(userId: Int): Int {
+        val db = this.readableDatabase
+
+        val query = "SELECT apartments.id FROM apartments " +
+                "INNER JOIN rentals ON apartments.id = rentals.apartment_id " +
+                "WHERE rentals.user_id = $userId AND rentals.is_archived = 0"
+
+        val result = db.rawQuery(query, null)
+        val apartId: Int
+
+        // Проверяем, есть ли у пользователя арендованная квартира
+        if (result.moveToFirst()) {
+            val columnIndex = result.getColumnIndex("id")
+            if (columnIndex != -1) {
+                apartId = result.getInt(columnIndex)
+            } else {
+                apartId = 0
+            }
+        } else {
+            // Если у пользователя нет квартиры
+            apartId = -1
+        }
+
+        result.close()
+        db.close()
+
+        return apartId
+    }
+
     fun getBalance(userId: Int) : String {
         val db = this.readableDatabase
 
@@ -330,6 +359,20 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(updateBalanceQuery)
 
         db.insert("rentals", null, newRentalValues)
+
+        db.close()
+    }
+
+    fun unrentApartment(userId: Int, apartmentId: Int) {
+        val db = writableDatabase
+
+        val updateValues = ContentValues()
+        updateValues.put("is_archived", 1)
+
+        val whereClause = "user_id = ? AND is_archived = 0"
+        val whereArgs = arrayOf(userId.toString())
+
+        db.update("rentals", updateValues, whereClause, whereArgs)
 
         db.close()
     }
