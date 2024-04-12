@@ -89,25 +89,6 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
             }
             db.insert("apartments", null, values)
         }
-
-        val examplePayments = listOf(
-            Payment(1, 1, 65000.0, 1, 1000.0, 1, 500.0, 1, 300.0, 1)
-        )
-
-        for (payment in examplePayments) {
-            val values = ContentValues().apply {
-                put("rental_id", payment.rentalId)
-                put("rental_price", payment.rentalPrice)
-                put("rental_price_paid", payment.rentalPricePaid)
-                put("gas_price", payment.gasPrice)
-                put("gas_price_paid", payment.gasPricePaid)
-                put("electricity_price", payment.electricityPrice)
-                put("electricity_price_paid", payment.electricityPricePaid)
-                put("water_price", payment.waterPrice)
-                put("water_price_paid", payment.waterPricePaid)
-            }
-            db.insert("payments", null, values)
-        }
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
