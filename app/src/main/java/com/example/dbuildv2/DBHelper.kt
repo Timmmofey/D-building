@@ -99,6 +99,13 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         onCreate(db)
     }
 
+    fun updateUserPhoto(userId: Int, photoUrl: String) {
+        val db = this.writableDatabase
+        val query = "UPDATE users SET photo = '$photoUrl' WHERE id = $userId"
+        db.execSQL(query)
+        db.close()
+    }
+
     fun addUser(user: User) {
         val values = ContentValues()
         values.put("phone", user.phone)
