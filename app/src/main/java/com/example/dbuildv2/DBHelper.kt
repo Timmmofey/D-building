@@ -410,6 +410,26 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         db.execSQL(updateBalanceQuery)
 
         db.insert("rentals", null, newRentalValues)
+//        val rentalId =
+
+//        val defaultPayments = listOf(
+//            Payment(1, rentalId.toInt(), 65000.0, 0, 0.0, 0, 0.0, 0, 0.0, 0)
+//        )
+//
+//        for (payment in defaultPayments) {
+//            val paymentValues = ContentValues().apply {
+//                put("rental_id", payment.rentalId)
+//                put("rental_price", payment.rentalPrice)
+//                put("rental_price_paid", payment.rentalPricePaid)
+//                put("gas_price", payment.gasPrice)
+//                put("gas_price_paid", payment.gasPricePaid)
+//                put("electricity_price", payment.electricityPrice)
+//                put("electricity_price_paid", payment.electricityPricePaid)
+//                put("water_price", payment.waterPrice)
+//                put("water_price_paid", payment.waterPricePaid)
+//            }
+//            db.insert("payments", null, paymentValues)
+//        }
 
         db.close()
     }

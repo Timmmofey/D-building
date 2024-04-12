@@ -111,17 +111,17 @@ class private_lobby_activity : AppCompatActivity() {
         userMore = findViewById(R.id.user_more)
 
         userAddress = findViewById(R.id.user_adress)
-        payment = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+
+        userAddress.text = db.getAddress(userId)
+        userBalance.text = db.getBalance(userId)
 
         updateMarkup()
 
         fullName.text = db.getUserName(userId)
         val imageUrl = db.getUserPhoto(userId)
-        userAddress.text = db.getAddress(userId)
-        userBalance.text = db.getBalance(userId)
+
 
         Picasso.get().load(imageUrl).resize(375, 375).into(photo)
-
 
         rentDebtButton.setOnClickListener {
             if (db.getBalance(userId).toDouble() == 0.0) {
@@ -456,6 +456,8 @@ class private_lobby_activity : AppCompatActivity() {
                 item.visibility = View.INVISIBLE
             }
         } else {
+            payment = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+
             rentDebt.text = payment.rentalPrice.toString()
             gasDebt.text = payment.gasPrice.toString()
             electricityDebt.text = payment.electricityPrice.toString()
