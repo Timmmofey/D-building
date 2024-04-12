@@ -250,6 +250,30 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return apartId
     }
 
+    fun getSortedUniqueCities(): Array<String> {
+        val cities = HashSet<String>()
+
+        val db = this.readableDatabase
+        val query = "SELECT DISTINCT city FROM apartments"
+        val cursor = db.rawQuery(query, null)
+
+        if (cursor != null && cursor.moveToFirst()) {
+            val cityIndex = cursor.getColumnIndex("city")
+
+            do {
+                val city = cursor.getString(cityIndex)
+                cities.add(city)
+            } while (cursor.moveToNext())
+
+            cursor.close()
+        }
+
+        db.close()
+
+        return cities.sorted().toTypedArray()
+    }
+
+
     fun getBalance(userId: Int) : String {
         val db = this.readableDatabase
 
