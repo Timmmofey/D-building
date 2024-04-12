@@ -17,10 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("session", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getInt("userId", -1)
-//        if (userId > 0) {
-//            val intent = Intent(this, private_lobby_activity::class.java)
-//            startActivity(intent)
-//        }
+        if (userId > 0) {
+            val intent = Intent(this, private_lobby_activity::class.java)
+            startActivity(intent)
+        }
 
         val lastNameInput: EditText = findViewById(R.id.last_name)
         val firstNameInput: EditText = findViewById(R.id.first_name)
