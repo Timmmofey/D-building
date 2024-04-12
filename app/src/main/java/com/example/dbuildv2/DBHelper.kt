@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 import java.time.temporal.TemporalAmount
 
 class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
-    SQLiteOpenHelper(context, "dBuilding", factory, 4) {
+    SQLiteOpenHelper(context, "dBuilding", factory, 6) {
     override fun onCreate(db: SQLiteDatabase?) {
         val queryUsers = "CREATE TABLE users (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -42,8 +42,6 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val queryPayments = "CREATE TABLE payments (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "rental_id INTEGER, " +
-                "year INTEGER, " +
-                "month TEXT, " +
                 "rental_price REAL," +
                 "rental_price_paid INTEGER, " +
                 "gas_price REAL, " +
@@ -90,6 +88,25 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 put("photo5", apartment.photo5)
             }
             db.insert("apartments", null, values)
+        }
+
+        val examplePayments = listOf(
+            Payment(1, 1, 65000.0, 1, 1000.0, 1, 500.0, 1, 300.0, 1)
+        )
+
+        for (payment in examplePayments) {
+            val values = ContentValues().apply {
+                put("rental_id", payment.rentalId)
+                put("rental_price", payment.rentalPrice)
+                put("rental_price_paid", payment.rentalPricePaid)
+                put("gas_price", payment.gasPrice)
+                put("gas_price_paid", payment.gasPricePaid)
+                put("electricity_price", payment.electricityPrice)
+                put("electricity_price_paid", payment.electricityPricePaid)
+                put("water_price", payment.waterPrice)
+                put("water_price_paid", payment.waterPricePaid)
+            }
+            db.insert("payments", null, values)
         }
     }
 
@@ -278,7 +295,7 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         }
     }
 
-    fun addBalance(userId: Int, amount: Int) {
+    fun addBalance(userId: Int, amount: Double) {
         if (userId == -1) {
             return
         }
@@ -286,6 +303,19 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val db = this.writableDatabase
 
         val query = "UPDATE users SET balance = (balance + ?) WHERE id = ?"
+
+        db.execSQL(query, arrayOf(amount, userId))
+        db.close()
+    }
+
+    fun reduceBalance(userId: Int, amount: Double) {
+        if (userId == -1) {
+            return
+        }
+
+        val db = this.writableDatabase
+
+        val query = "UPDATE users SET balance = (balance - ?) WHERE id = ?"
 
         db.execSQL(query, arrayOf(amount, userId))
         db.close()
@@ -394,6 +424,54 @@ class DBHelper(val context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val whereArgs = arrayOf(userId.toString())
 
         db.update("rentals", updateValues, whereClause, whereArgs)
+
+        db.close()
+    }
+
+    fun getRentId(userId: Int, apartmentId: Int): Int {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT id FROM rentals WHERE user_id = $userId AND apartment_id = $apartmentId AND is_archived = 0", null)
+        cursor.moveToFirst()
+        val rentalId = cursor.getInt(0)
+        db.close()
+        cursor.close()
+        return rentalId
+    }
+
+    fun getPayments(rentalId: Int) : Payment {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM payments WHERE rental_id = $rentalId", null)
+        cursor.moveToFirst()
+        val payment = Payment(
+            cursor.getInt(0), cursor.getInt(1),
+            cursor.getDouble(2), cursor.getInt(3),
+            cursor.getDouble(4), cursor.getInt(5),
+            cursor.getDouble(6), cursor.getInt(7),
+            cursor.getDouble(8), cursor.getInt(9)
+        )
+        db.close()
+        cursor.close()
+        return payment
+    }
+
+    fun updatePayments(payment: Payment) {
+        val db = writableDatabase
+
+        val values = ContentValues().apply {
+            put("rental_price", payment.rentalPrice)
+            put("rental_price_paid", payment.rentalPricePaid)
+            put("gas_price", payment.gasPrice)
+            put("gas_price_paid", payment.gasPricePaid)
+            put("electricity_price", payment.electricityPrice)
+            put("electricity_price_paid", payment.electricityPricePaid)
+            put("water_price", payment.waterPrice)
+            put("water_price_paid", payment.waterPricePaid)
+        }
+
+        val whereClause = "id = ?"
+        val whereArgs = arrayOf(payment.id.toString())
+
+        db.update("payments", values, whereClause, whereArgs)
 
         db.close()
     }

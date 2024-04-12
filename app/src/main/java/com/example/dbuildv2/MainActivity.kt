@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
                 val db = DBHelper(this, null)
                 db.addUser(user)
+                db.close()
 
                 Toast.makeText(this,"Регистрация прошла успешно.", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, authorisation_activity::class.java)

@@ -43,7 +43,7 @@ class activity_add_funds : AppCompatActivity() {
                     val cardMonth = dm.removeZero(cardExpiration.text[0].toString() + cardExpiration.text[1].toString()).toInt()
                     val cardYear = dm.removeZero(cardExpiration.text[3].toString() + cardExpiration.text[4].toString()).toInt()
                     val fullcardYear: Int = ("20" + cardYear.toString()).toInt()
-                    val paymentAmount = cardAmount.text.toString().toInt()
+                    val paymentAmount = cardAmount.text.toString().toDouble()
 
                     if ( (fullcardYear < currentDate.year) || (fullcardYear == currentDate.year && cardMonth < currentDate.monthValue) ) {
                         Toast.makeText(this, "Срок карты истек.", Toast.LENGTH_SHORT).show()

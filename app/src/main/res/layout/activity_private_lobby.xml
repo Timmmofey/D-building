@@ -81,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="11dp"
-        android:text="Оплата за текущий месяц:"
+        android:text="Долг за коммунальные платежи:"
         android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_more" />
@@ -127,7 +127,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/user_rentDebt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
@@ -141,11 +141,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="руб."
-        app:layout_constraintStart_toEndOf="@+id/textView17"
-        app:layout_constraintTop_toTopOf="@+id/textView17" />
+        app:layout_constraintStart_toEndOf="@+id/user_rentDebt"
+        app:layout_constraintTop_toTopOf="@+id/user_rentDebt" />
 
     <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/user_gasDebt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -159,11 +159,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="руб."
-        app:layout_constraintStart_toEndOf="@+id/textView19"
-        app:layout_constraintTop_toTopOf="@+id/textView19" />
+        app:layout_constraintStart_toEndOf="@+id/user_gasDebt"
+        app:layout_constraintTop_toTopOf="@+id/user_gasDebt" />
 
     <TextView
-        android:id="@+id/textView21"
+        android:id="@+id/user_elecDebt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -177,11 +177,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="руб."
-        app:layout_constraintStart_toEndOf="@+id/textView21"
-        app:layout_constraintTop_toTopOf="@+id/textView21" />
+        app:layout_constraintStart_toEndOf="@+id/user_elecDebt"
+        app:layout_constraintTop_toTopOf="@+id/user_elecDebt" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/user_waterDebt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -195,8 +195,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="руб."
-        app:layout_constraintStart_toEndOf="@+id/textView23"
-        app:layout_constraintTop_toTopOf="@+id/textView23" />
+        app:layout_constraintStart_toEndOf="@+id/user_waterDebt"
+        app:layout_constraintTop_toTopOf="@+id/user_waterDebt" />
 
     <Button
         android:id="@+id/buttonPayRent"
@@ -225,9 +225,8 @@
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginEnd="28dp"
-        android:backgroundTint="#7C7777"
         android:padding="0dp"
-        android:text="Оплачено"
+        android:text="Оплатить"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView22" />
@@ -237,9 +236,8 @@
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:layout_marginEnd="28dp"
-        android:backgroundTint="#7C7777"
         android:padding="0dp"
-        android:text="Оплачено"
+        android:text="Оплатить"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView24" />
@@ -252,16 +250,6 @@
         android:text="Изменить фото"
         app:layout_constraintStart_toStartOf="@+id/user_spendmoney"
         app:layout_constraintTop_toBottomOf="@+id/user_spendmoney" />
-
-    <TextView
-        android:id="@+id/textView25"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="4dp"
-        android:text="История оплаты за прошедшие месяцы:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonPayWater" />
 
     <Button
         android:id="@+id/user_more"
@@ -284,14 +272,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/user_more"
         app:layout_constraintTop_toBottomOf="@+id/user_adress" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:layout_width="398dp"
-        android:layout_height="302dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/logout"

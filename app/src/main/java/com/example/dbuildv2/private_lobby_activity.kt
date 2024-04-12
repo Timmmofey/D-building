@@ -1,8 +1,11 @@
 package com.example.dbuildv2
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,7 +14,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.squareup.picasso.Picasso
-import okhttp3.MediaType
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -25,6 +27,8 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import java.io.File
 import android.provider.MediaStore
+import android.text.InputType
+import android.widget.EditText
 import android.widget.Toast
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
@@ -63,8 +67,22 @@ data class ImgurImageData(
 class private_lobby_activity : AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 1
     private lateinit var db: DBHelper
+    private lateinit var payment: Payment
     private var userId: Int = 0
     private lateinit var imgurApiService: ImgurApiService
+
+    private lateinit var rentDebt: TextView
+    private lateinit var gasDebt: TextView
+    private lateinit var electricityDebt: TextView
+    private lateinit var waterDebt: TextView
+    private lateinit var rentDebtButton: Button
+    private lateinit var gasDebtButton: Button
+    private lateinit var electricityDebtButton: Button
+    private lateinit var waterDebtButton: Button
+    private lateinit var userAddress: TextView
+    private lateinit var userMore: Button
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,34 +96,24 @@ class private_lobby_activity : AppCompatActivity() {
         val fullName: TextView = findViewById(R.id.fullName)
         val photo: ImageView = findViewById(R.id.userPhoto)
         val logOut: Button = findViewById(R.id.logout)
-        val userAddress: TextView = findViewById(R.id.user_adress)
         val userBalance: TextView = findViewById(R.id.user_balance)
+        rentDebt = findViewById(R.id.user_rentDebt)
+        gasDebt = findViewById(R.id.user_gasDebt)
+        electricityDebt = findViewById(R.id.user_elecDebt)
+        waterDebt = findViewById(R.id.user_waterDebt)
+        rentDebtButton = findViewById(R.id.buttonPayRent)
+        gasDebtButton = findViewById(R.id.buttonPayGas)
+        electricityDebtButton = findViewById(R.id.buttonPayElectricity)
+        waterDebtButton = findViewById(R.id.buttonPayWater)
         val userChangeApartment: Button = findViewById(R.id.user_changeapart)
-        val userMore: Button = findViewById(R.id.user_more)
         val spendMoneyButton: Button = findViewById(R.id.user_spendmoney)
         val changePhotoButton: Button = findViewById(R.id.user_change_photo)
+        userMore = findViewById(R.id.user_more)
 
-        val hideButtons = listOf(
-            findViewById<TextView>(R.id.textView12),
-            findViewById<TextView>(R.id.textView13),
-            findViewById<TextView>(R.id.textView14),
-            findViewById<TextView>(R.id.textView15),
-            findViewById<TextView>(R.id.textView16),
-            findViewById<TextView>(R.id.textView17),
-            findViewById<TextView>(R.id.textView18),
-            findViewById<TextView>(R.id.textView19),
-            findViewById<TextView>(R.id.textView20),
-            findViewById<TextView>(R.id.textView21),
-            findViewById<TextView>(R.id.textView22),
-            findViewById<TextView>(R.id.textView23),
-            findViewById<TextView>(R.id.textView24),
-            findViewById<TextView>(R.id.textView25),
-            findViewById<Button>(R.id.buttonPayRent),
-            findViewById<Button>(R.id.buttonPayGas),
-            findViewById<Button>(R.id.buttonPayElectricity),
-            findViewById<Button>(R.id.buttonPayWater),
-            findViewById<Button>(R.id.user_more)
-        )
+        userAddress = findViewById(R.id.user_adress)
+        payment = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+
+        updateMarkup()
 
         fullName.text = db.getUserName(userId)
         val imageUrl = db.getUserPhoto(userId)
@@ -114,10 +122,217 @@ class private_lobby_activity : AppCompatActivity() {
 
         Picasso.get().load(imageUrl).resize(375, 375).into(photo)
 
-        if (userAddress.text == "У вас нет арендованной квартиры." || userAddress.text == "Столбец с адресом не найден.") {
-            for (item in hideButtons) {
-                item.visibility = View.INVISIBLE
+
+        rentDebtButton.setOnClickListener {
+            if (db.getBalance(userId).toDouble() == 0.0) {
+                Toast.makeText(this, "Сначала пополните баланс.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Погашение коммунального долга")
+            builder.setMessage("Выберите сумму для оплаты")
+            val input = EditText(this)
+            input.setText(payment.rentalPrice.toString())
+            input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            builder.setView(input)
+            builder.setPositiveButton("Оплатить") { dialogInterface: DialogInterface, i: Int ->
+                val enteredAmount = input.text.toString()
+
+                try {
+                    val amountDouble = enteredAmount.toDouble()
+
+                    if(amountDouble > payment.rentalPrice) {
+                        Toast.makeText(this, "Сумма оплаты превышает сумму долга.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    if (amountDouble > db.getBalance(userId).toDouble()) {
+                        Toast.makeText(this, "У вас недостаточно средств.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    val newPayment = Payment(payment.id, payment.rentalId, payment.rentalPrice - amountDouble,
+                        payment.rentalPricePaid, payment.gasPrice, payment.gasPricePaid, payment.electricityPrice,
+                        payment.electricityPricePaid, payment.waterPrice, payment.waterPricePaid
+                    )
+
+                    db.updatePayments(newPayment)
+                    db.reduceBalance(userId, amountDouble)
+
+                    payment = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+                    updateMarkup()
+                    userBalance.text = db.getBalance(userId)
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Некорректный формат числа.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            builder.setNegativeButton("Отмена") { dialogInterface: DialogInterface, i: Int ->
+
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+
+        gasDebtButton.setOnClickListener {
+            if (db.getBalance(userId).toDouble() == 0.0) {
+                Toast.makeText(this, "Сначала пополните баланс.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Погашение коммунального долга")
+            builder.setMessage("Выберите сумму для оплаты")
+            val input = EditText(this)
+            input.setText(payment.gasPrice.toString())
+            input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            builder.setView(input)
+            builder.setPositiveButton("Оплатить") { dialogInterface: DialogInterface, i: Int ->
+                val enteredAmount = input.text.toString()
+
+                try {
+                    val amountDouble = enteredAmount.toDouble()
+
+                    if(amountDouble > payment.gasPrice) {
+                        Toast.makeText(this, "Сумма оплаты превышает сумму долга.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    if (amountDouble > db.getBalance(userId).toDouble()) {
+                        Toast.makeText(this, "У вас недостаточно средств.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    val newPayment = Payment(payment.id, payment.rentalId, payment.rentalPrice,
+                        payment.rentalPricePaid, payment.gasPrice - amountDouble, payment.gasPricePaid, payment.electricityPrice,
+                        payment.electricityPricePaid, payment.waterPrice, payment.waterPricePaid
+                    )
+
+                    db.updatePayments(newPayment)
+                    db.reduceBalance(userId, amountDouble)
+
+                    payment = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+                    updateMarkup()
+                    userBalance.text = db.getBalance(userId)
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Некорректный формат числа.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            builder.setNegativeButton("Отмена") { dialogInterface: DialogInterface, i: Int ->
+
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+
+        electricityDebtButton.setOnClickListener {
+            if (db.getBalance(userId).toDouble() == 0.0) {
+                Toast.makeText(this, "Сначала пополните баланс.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Погашение коммунального долга")
+            builder.setMessage("Выберите сумму для оплаты")
+            val input = EditText(this)
+            input.setText(payment.electricityPrice.toString())
+            input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            builder.setView(input)
+            builder.setPositiveButton("Оплатить") { dialogInterface: DialogInterface, i: Int ->
+                val enteredAmount = input.text.toString()
+
+                try {
+                    val amountDouble = enteredAmount.toDouble()
+
+                    if(amountDouble > payment.electricityPrice) {
+                        Toast.makeText(this, "Сумма оплаты превышает сумму долга.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    if (amountDouble > db.getBalance(userId).toDouble()) {
+                        Toast.makeText(this, "У вас недостаточно средств.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    val newPayment = Payment(payment.id, payment.rentalId, payment.rentalPrice,
+                        payment.rentalPricePaid, payment.gasPrice, payment.gasPricePaid, payment.electricityPrice - amountDouble,
+                        payment.electricityPricePaid, payment.waterPrice, payment.waterPricePaid
+                    )
+
+                    db.updatePayments(newPayment)
+                    db.reduceBalance(userId, amountDouble)
+
+                    payment = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+                    updateMarkup()
+                    userBalance.text = db.getBalance(userId)
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Некорректный формат числа.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            builder.setNegativeButton("Отмена") { dialogInterface: DialogInterface, i: Int ->
+
+            }
+            val dialog = builder.create()
+            dialog.show()
+        }
+
+        waterDebtButton.setOnClickListener {
+            if (db.getBalance(userId).toDouble() == 0.0) {
+                Toast.makeText(this, "Сначала пополните баланс.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Погашение коммунального долга")
+            builder.setMessage("Выберите сумму для оплаты")
+            val input = EditText(this)
+            input.setText(payment.waterPrice.toString())
+            input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            builder.setView(input)
+            builder.setPositiveButton("Оплатить") { dialogInterface: DialogInterface, i: Int ->
+                val enteredAmount = input.text.toString()
+
+                try {
+                    val amountDouble = enteredAmount.toDouble()
+
+                    if(amountDouble > payment.waterPrice) {
+                        Toast.makeText(this, "Сумма оплаты превышает сумму долга.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    if (amountDouble > db.getBalance(userId).toDouble()) {
+                        Toast.makeText(this, "У вас недостаточно средств.", Toast.LENGTH_SHORT).show()
+
+                        return@setPositiveButton
+                    }
+
+                    val newPayment = Payment(payment.id, payment.rentalId, payment.rentalPrice,
+                        payment.rentalPricePaid, payment.gasPrice, payment.gasPricePaid, payment.electricityPrice,
+                        payment.electricityPricePaid, payment.waterPrice - amountDouble, payment.waterPricePaid
+                    )
+
+                    db.updatePayments(newPayment)
+                    db.reduceBalance(userId, amountDouble)
+
+                    payment = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+                    updateMarkup()
+                    userBalance.text = db.getBalance(userId)
+                } catch (e: NumberFormatException) {
+                    Toast.makeText(this, "Некорректный формат числа.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            builder.setNegativeButton("Отмена") { dialogInterface: DialogInterface, i: Int ->
+
+            }
+            val dialog = builder.create()
+            dialog.show()
         }
 
         userChangeApartment.setOnClickListener {
@@ -212,5 +427,64 @@ class private_lobby_activity : AppCompatActivity() {
         val path = cursor.getString(idx)
         cursor.close()
         return path
+    }
+
+    private fun updateMarkup() {
+        if (userAddress.text == "У вас нет арендованной квартиры." || userAddress.text == "Столбец с адресом не найден.") {
+            val hideButtons = listOf(
+                findViewById<TextView>(R.id.textView12),
+                findViewById<TextView>(R.id.textView13),
+                findViewById<TextView>(R.id.textView14),
+                findViewById<TextView>(R.id.textView15),
+                findViewById<TextView>(R.id.textView16),
+                rentDebt,
+                findViewById<TextView>(R.id.textView18),
+                gasDebt,
+                findViewById<TextView>(R.id.textView20),
+                electricityDebt,
+                findViewById<TextView>(R.id.textView22),
+                waterDebt,
+                findViewById<TextView>(R.id.textView24),
+                rentDebtButton,
+                gasDebtButton,
+                electricityDebtButton,
+                waterDebtButton,
+                userMore
+            )
+
+            for (item in hideButtons) {
+                item.visibility = View.INVISIBLE
+            }
+        } else {
+            rentDebt.text = payment.rentalPrice.toString()
+            gasDebt.text = payment.gasPrice.toString()
+            electricityDebt.text = payment.electricityPrice.toString()
+            waterDebt.text = payment.waterPrice.toString()
+
+            if (payment.rentalPrice == 0.0) {
+                rentDebtButton.setBackgroundColor(Color.parseColor("#7C7777"))
+                rentDebtButton.text = "Оплачено"
+                rentDebtButton.isClickable = false
+                rentDebtButton.isEnabled = false
+            }
+            if (payment.gasPrice == 0.0) {
+                gasDebtButton.setBackgroundColor(Color.parseColor("#7C7777"))
+                gasDebtButton.text = "Оплачено"
+                gasDebtButton.isClickable = false
+                gasDebtButton.isEnabled = false
+            }
+            if (payment.electricityPrice == 0.0) {
+                electricityDebtButton.setBackgroundColor(Color.parseColor("#7C7777"))
+                electricityDebtButton.text = "Оплачено"
+                electricityDebtButton.isClickable = false
+                electricityDebtButton.isEnabled = false
+            }
+            if (payment.waterPrice == 0.0) {
+                waterDebtButton.setBackgroundColor(Color.parseColor("#7C7777"))
+                waterDebtButton.text = "Оплачено"
+                waterDebtButton.isClickable = false
+                waterDebtButton.isEnabled = false
+            }
+        }
     }
 }
