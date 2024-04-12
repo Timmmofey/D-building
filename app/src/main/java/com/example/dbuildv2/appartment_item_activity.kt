@@ -77,6 +77,14 @@ class appartment_item_activity : AppCompatActivity() {
                     val isApartmentRented = (db.getAddress(userId) != "У вас нет арендованной квартиры." &&
                             db.getAddress(userId) != "Столбец с адресом не найден.")
 
+                    if (isApartmentRented) {
+                        val payments = db.getPayments(db.getRentId(userId, db.getApartmentId(userId)))
+                        if (payments.rentalPrice != 0.0 || payments.gasPrice != 0.0 || payments.electricityPrice != 0.0 || payments.waterPrice != 0.0) {
+                            Toast.makeText(this,"Сначала погасите задолженность.", Toast.LENGTH_SHORT).show()
+                            return@setPositiveButton
+                        }
+                    }
+
                     db.rentApartment(userId, apartId, isApartmentRented, db.getBalance(userId).toInt() - apartment.price)
 
                     db.close()
@@ -111,6 +119,12 @@ class appartment_item_activity : AppCompatActivity() {
             builder.setTitle("Подтверждение завершения аренды")
             builder.setMessage("Вы уверены, что хотите отказаться от квартиры?")
             builder.setPositiveButton("Да") { dialogInterface: DialogInterface, i: Int ->
+                val payments = db.getPayments(db.getRentId(userId, apartId))
+                if (payments.rentalPrice != 0.0 || payments.gasPrice != 0.0 || payments.electricityPrice != 0.0 || payments.waterPrice != 0.0) {
+                    Toast.makeText(this,"Сначала погасите задолженность.", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
                 db.unrentApartment(userId, apartId)
 
                 Toast.makeText(this,"Аренда завершена.", Toast.LENGTH_SHORT).show()
